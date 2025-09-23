@@ -22,7 +22,7 @@ CREATE TABLE banks (
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE cards (
+CREATE TABLE credit_cards (
     id SERIAL PRIMARY KEY,
     bank_id INT REFERENCES banks(id),
     name TEXT NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE email_transactions (
     transaction_date DATE NOT NULL,
     processed BOOLEAN DEFAULT FALSE,
     currency TEXT NOT NULL CHECK (currency IN ('USD', 'HNL')),
-    card_id INT REFERENCES cards(id),
+    card_id INT REFERENCES credit_cards(id),
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -116,6 +116,6 @@ DROP TABLE journals;
 DROP TABLE transactions;
 DROP TABLE usd_exchange_rates;
 DROP TABLE email_transactions;
-DROP TABLE cards;
+DROP TABLE credit_cards;
 DROP TABLE banks;
 DROP TABLE accounts;
