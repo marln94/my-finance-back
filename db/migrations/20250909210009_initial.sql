@@ -98,6 +98,7 @@ CREATE TABLE tags (
     name TEXT UNIQUE NOT NULL,
     description TEXT,
     is_active BOOLEAN DEFAULT TRUE,
+    side TEXT NOT NULL CHECK (side IN ('debe', 'haber')),
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
