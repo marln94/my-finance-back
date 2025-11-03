@@ -160,7 +160,7 @@ VALUES (
     {amount:.2f},
     '{side}',
     '{entry_description_escaped}',
-    '{entry_metadata_escaped}'
+    {f"'{entry_metadata_escaped}'" if entry_metadata else 'NULL'}
 );
 """)
         
