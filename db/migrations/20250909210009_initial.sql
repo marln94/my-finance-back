@@ -74,6 +74,8 @@ CREATE TABLE journals (
     transaction_id INT REFERENCES transactions(id),
     description TEXT,
     date DATE NOT NULL,
+    statement TEXT,
+    bank_statement TEXT,
     metadata JSONB,
     email_transaction_id INT REFERENCES email_transactions(id),
     created_at TIMESTAMPTZ DEFAULT now(),
@@ -88,6 +90,7 @@ CREATE TABLE journal_entries (
     side TEXT NOT NULL CHECK (side IN ('debe', 'haber')),
     description TEXT,
     reference TEXT,
+    metadata JSONB,
     exchange_rate_id INT REFERENCES usd_exchange_rates(id),
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
