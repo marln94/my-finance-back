@@ -16,5 +16,5 @@ WHERE je.metadata IS NOT NULL;
 
 
 -- migrate:down
-DELETE FROM tags;
 DELETE FROM entry_tags;
+DELETE FROM tags;

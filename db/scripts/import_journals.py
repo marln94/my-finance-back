@@ -137,11 +137,17 @@ VALUES ({journal_number}, '{description_escaped}', '{date_sql}', '{metadata_esca
         for entry in entries:
             account_code_escaped = escape_sql_string(entry['account_code'])
             entry_description_escaped = escape_sql_string(entry['description'])
+            double_entry = False
+            double_entry_amount = 0
             
             # Determine amount and side
             if entry['debe'] > 0:
                 amount = entry['debe']
                 side = 'debe'
+                if entry['haber'] > 0:
+                    # Double entry case
+                    double_entry = True
+                    double_entry_amount = entry['haber']
             else:
                 amount = entry['haber']
                 side = 'haber'
@@ -165,6 +171,20 @@ VALUES (
 """)
         
         sql_statements.append("\n")
+
+        if double_entry:
+            sql_statements.append(f"""INSERT INTO journal_entries (journal_id, account_id, amount, side, description, metadata)
+VALUES (
+    (SELECT id FROM journals WHERE journal_number = {journal_number}),
+    (SELECT id FROM accounts WHERE code = '{account_code_escaped}'),
+    {double_entry_amount:.2f},
+    'haber',
+    '{entry_description_escaped}',
+    {f"'{entry_metadata_escaped}'" if entry_metadata else 'NULL'}
+);
+""")
+        
+            sql_statements.append("\n")
     
     # Process single entries (without journal number)
     if single_entries:
